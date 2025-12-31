@@ -2,10 +2,10 @@ use leptos::prelude::*;
 use crate::models::Project;
 use crate::components::navbar::Navbar;
 use crate::components::project_card::ProjectCard;
-use crate::components::contact_form::ContactForm;
+use crate::components::contact_form::Contact;
 use crate::components::mining_hero::MiningHero;
 use crate::components::footer::Footer;
-use crate::components::block_pit::BlockPit; // Import the new component
+use crate::components::block_pit::BlockPit; 
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -44,6 +44,7 @@ pub fn App() -> impl IntoView {
                 </div>
 
                 <MiningHero />
+                
             </section>
 
             // --- PROJECTS ---
@@ -71,7 +72,7 @@ pub fn App() -> impl IntoView {
                  <div class="max-w-xl mx-auto text-center mb-10">
                     <h2 class="text-2xl font-bold text-white uppercase tracking-widest">"// Broadcast_Tx"</h2>
                  </div>
-                 <ContactForm />
+                 <Contact />
             </section>
 
             // --- NEW BLOCK PIT ---

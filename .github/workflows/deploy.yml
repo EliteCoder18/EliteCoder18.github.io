@@ -5,7 +5,7 @@ on:
     branches: [ "main", "master" ]
 
 permissions:
-  contents: write # Required to push to the gh-pages branch
+  contents: write
 
 jobs:
   build-and-deploy:
@@ -14,25 +14,22 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 1. Install Rust and the Wasm target
       - name: Install Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: wasm32-unknown-unknown
 
-      # 2. Install Trunk (The builder)
       - name: Install Trunk
         uses: jetli/trunk-action@v0.5.0
 
-      # 3. Build the Project
-      # IMPORTANT: If your repo is NOT 'username.github.io', change public-url below.
-      # Example: If repo is 'my-portfolio', use: --public-url /my-portfolio/
+      # FIX 1: Use '/' because your site is at https://EliteCoder18.github.io/
       - name: Build with Trunk
         run: trunk build --release --public-url /
 
-      # 4. Deploy to GitHub Pages
+
+
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: dist # The folder Trunk generates
-          branch: gh-pages # The branch the action will deploy to
+          folder: dist
+          branch: gh-pages
