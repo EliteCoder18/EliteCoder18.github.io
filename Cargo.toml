@@ -1,0 +1,24 @@
+[package]
+name = "my-portfolio"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+gloo-net = "0.6"
+wasm-bindgen = "0.2"
+serde = { version = "1.0", features = ["derive"] }
+leptos={version="0.8.2",features=["csr"]}
+console_error_panic_hook={version="0.1.7"}
+
+[dependencies.web-sys]
+version = "0.3"
+features = [
+    "HtmlElement",
+    "DomRect",
+    "Element",
+    "CssStyleDeclaration",
+    "Window",
+    "Document",
+    "Node",
+    "HtmlDivElement"
+]
