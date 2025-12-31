@@ -30,27 +30,41 @@ pub fn BlockPit() -> impl IntoView {
     let secondary_skills = "GIT • DOCKER • POSTGRES • TAILWIND • LINUX • AWS • TYPESCRIPT • NGINX • CI/CD • ACTIX • AXUM • GRAPHQL • REST • ";
 
     // --- PHYSICS CONSTANTS ---
-    let gravity = 0.5;
-    let friction = 0.96;
+    let gravity = 0.6;
+    let friction = 0.95;
     let floor_friction = 0.90;
-    let bounce = 0.2;
+    let bounce = 0.15;
     let floor_y = 300.0;
-    let sleep_threshold = 0.1;
+    let sleep_threshold = 0.05;
     let block_size = 96.0; 
-    let collision_dist = 130.0; 
+    let collision_dist = 115.0; 
 
     // --- STATE ---
     let objects = Rc::new(RefCell::new(
         (0..block_count).map(|i| {
-            let start_x = 200.0 + (i as f64 * 200.0); 
+            // MANUAL COORDINATES FOR LAYOUT
+            let (start_x, start_y) = match i {
+                // --- GROUP 1: CENTER PYRAMID (3 Blocks) ---
+                0 => (550.0, floor_y - block_size - 5.0),          // Bottom Left
+                1 => (550.0 + 100.0, floor_y - block_size - 5.0),  // Bottom Right
+                2 => (550.0 + 50.0, floor_y - (block_size * 2.0) - 5.0), // Top Center
+                
+                // --- GROUP 2: EXTREME RIGHT STACK (2 Blocks) ---
+                3 => (1000.0, floor_y - block_size - 5.0),         // Bottom
+                4 => (1000.0, floor_y - (block_size * 2.0) - 5.0), // Top
+                
+                // Fallback (just in case you add more skills later)
+                _ => (100.0 + (i as f64 * 50.0), 0.0),
+            };
+
             PhysicsObject {
                 x: start_x, 
-                y: floor_y - block_size - 1.0, 
+                y: start_y, 
                 vx: 0.0,
                 vy: 0.0,
                 width: block_size,
                 height: block_size,
-                rotation: ((i as f64 * 123.0) % 60.0) - 30.0,
+                rotation: 0.0,
                 vr: 0.0,
                 is_sleeping: false,
             }
@@ -67,7 +81,7 @@ pub fn BlockPit() -> impl IntoView {
         let mouse_pos = mouse_pos_for_effect.clone();
         
         let get_container_width = move || -> f64 {
-            if let Some(div) = container_ref.get() {
+            if let Some(div) = container_ref.get_untracked() {
                  return div.offset_width() as f64;
             }
             1200.0
@@ -85,40 +99,46 @@ pub fn BlockPit() -> impl IntoView {
                 let dx = objs[i].x - mx;
                 let dy = objs[i].y - my;
                 let dist = (dx*dx + dy*dy).sqrt();
-                let kick_radius = 130.0; 
+                let kick_radius = 140.0; 
 
+                // Mouse Interaction
                 if dist < kick_radius {
                     objs[i].is_sleeping = false;
                     let force = (kick_radius - dist) / kick_radius;
-                    let kick_power = 1.5;
+                    let kick_power = 2.0;
                     objs[i].vx += (dx / dist) * kick_power * force * 5.0;
                     objs[i].vy += (dy / dist) * kick_power * force * 5.0;
-                    objs[i].vr += (dx / dist) * 0.5; 
+                    objs[i].vr += (dx / dist) * 1.5; 
                 }
 
                 if objs[i].is_sleeping { continue; }
 
+                // Physics Steps
                 objs[i].vy += gravity;
                 objs[i].x += objs[i].vx;
                 objs[i].y += objs[i].vy;
                 objs[i].rotation += objs[i].vr;
                 objs[i].vx *= friction;
                 objs[i].vy *= friction;
-                objs[i].vr *= 0.90; 
+                objs[i].vr *= 0.92; 
 
+                // Floor Collision
                 if objs[i].y > floor_y - objs[i].height {
                     objs[i].y = floor_y - objs[i].height;
                     objs[i].vy *= -bounce;
                     objs[i].vx *= floor_friction; 
+                    
                     if objs[i].vy.abs() < sleep_threshold && objs[i].vx.abs() < sleep_threshold {
                         objs[i].vy = 0.0; objs[i].vx = 0.0; objs[i].vr = 0.0; objs[i].is_sleeping = true; 
                     }
                 }
 
+                // Wall Collision
                 if objs[i].x < 0.0 { objs[i].x = 0.0; objs[i].vx *= -0.5; }
                 if objs[i].x > container_width - objs[i].width { objs[i].x = container_width - objs[i].width; objs[i].vx *= -0.5; }
             }
 
+            // Block-to-Block Collision
             for i in 0..block_count {
                 for j in (i + 1)..block_count {
                     let dx = objs[i].x - objs[j].x;
@@ -128,17 +148,21 @@ pub fn BlockPit() -> impl IntoView {
 
                     if distance < min_dist {
                         objs[i].is_sleeping = false; objs[j].is_sleeping = false;
+                        
                         let overlap = min_dist - distance;
                         let push_x = (dx / distance) * overlap * 0.5;
                         let push_y = (dy / distance) * overlap * 0.5;
+                        
                         objs[i].x += push_x; objs[i].y += push_y;
                         objs[j].x -= push_x; objs[j].y -= push_y;
-                        objs[i].vx += push_x * 0.05; objs[i].vy += push_y * 0.05;
-                        objs[j].vx -= push_x * 0.05; objs[j].vy -= push_y * 0.05;
+                        
+                        objs[i].vx += push_x * 0.2; objs[i].vy += push_y * 0.2;
+                        objs[j].vx -= push_x * 0.2; objs[j].vy -= push_y * 0.2;
                     }
                 }
             }
 
+            // Render
             for i in 0..block_count {
                 if let Some(el) = document().get_element_by_id(&format!("phys-block-{}", i)) {
                    if let Ok(el) = el.dyn_into::<HtmlElement>() {
@@ -180,7 +204,7 @@ pub fn BlockPit() -> impl IntoView {
     view! {
         <div 
             node_ref=container_ref
-            class="w-full h-[300px] relative mt-20 mb-0 z-20 cursor-crosshair border-b-2 border-zinc-800"
+            class="w-full h-[300px] relative mt-20 mb-0 z-20 cursor-default border-b-2 border-zinc-800"
             on:mousemove=handle_mousemove
             on:mouseleave=handle_mouseleave
         >
@@ -191,7 +215,6 @@ pub fn BlockPit() -> impl IntoView {
                 }"
             </style>
 
-            // BACKGROUND SCROLL
             <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
                 <div class="absolute top-10 left-0 w-[200%] opacity-20">
                     <div 
@@ -215,7 +238,6 @@ pub fn BlockPit() -> impl IntoView {
                 "CORE_STACK"
             </div>
 
-            // BLOCKS
             {(0..block_count).map(|i| {
                 view! {
                     <div 
@@ -223,10 +245,8 @@ pub fn BlockPit() -> impl IntoView {
                         class="absolute top-0 left-0 w-24 h-24 bg-zinc-900 border-2 border-orange-500/50 rounded-lg flex items-center justify-center shadow-[0_0_20px_rgba(249,115,22,0.15)] select-none z-20"
                         style="will-change: transform;" 
                     >
-                        // Texture
                         <div class="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNCIgaGVpZ2h0PSI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIxIiBmaWxsPSIjMzMzIiAvPjwvc3ZnPg==')]"></div>
                         
-                        // --- FONT UPGRADE HERE ---
                         <span class="font-black text-xl tracking-wider relative z-30 text-orange-500 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]" 
                               style="font-family: monospace;">
                             {core_skills[i]}

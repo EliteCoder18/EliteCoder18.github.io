@@ -33,7 +33,7 @@ pub fn Contact() -> impl IntoView {
                 message: message.get(),
             };
 
-            // 👇 REPLACE THIS WITH YOUR REAL FORMSPREE ID
+       
             let res = client.post("https://formspree.io/f/mvzoepgp")
                 .header("Accept", "application/json")
                 .form(&payload) // Using .form() for best compatibility
@@ -49,7 +49,7 @@ pub fn Contact() -> impl IntoView {
                         set_email.set(String::new());
                         set_message.set(String::new());
                         
-                        // Optional: Reset button after 3 seconds
+                       
                         leptos::leptos_dom::helpers::set_timeout(move || {
                             set_status.set("idle"); 
                         }, std::time::Duration::from_secs(3));
@@ -66,7 +66,7 @@ pub fn Contact() -> impl IntoView {
 
     view! {
         <section class="w-full max-w-4xl mx-auto px-4 py-20 relative z-10" id="contact">
-            // HUMAN READABLE HEADER
+
             <div class="mb-12 text-center">
                 <h2 class="text-4xl md:text-5xl font-bold text-zinc-100 mb-4 tracking-tight">
                     "Get In Touch"
@@ -157,7 +157,7 @@ pub fn Contact() -> impl IntoView {
                             </button>
                         </div>
                         
-                        // Error Text (Only visible on error)
+                        // Error Text
                         {move || if status.get() == "error" {
                             view! { <p class="text-red-500 text-sm text-right">"Something went wrong. Please check your connection."</p> }.into_any()
                         } else {

@@ -22,11 +22,13 @@ jobs:
       - name: Install Trunk
         uses: jetli/trunk-action@v0.5.0
 
-      # FIX 1: Use '/' because your site is at https://EliteCoder18.github.io/
       - name: Build with Trunk
         run: trunk build --release --public-url /
 
-
+      - name: Post-Build Fixes
+        run: |
+          touch dist/.nojekyll
+          cp dist/index.html dist/404.html
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4

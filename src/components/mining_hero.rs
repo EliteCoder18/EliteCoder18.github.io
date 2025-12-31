@@ -12,7 +12,7 @@ struct CodeToken {
 
 #[component]
 pub fn MiningHero() -> impl IntoView {
-    // 1. DEFINE TOKENS (The code content)
+    // 1. DEFINE TOKENS
     let tokens = vec![
         CodeToken { text: "struct", class: "text-purple-400" },
         CodeToken { text: " ", class: "text-zinc-300" },
@@ -57,7 +57,7 @@ pub fn MiningHero() -> impl IntoView {
     let total_chars: usize = tokens.iter().map(|t| t.text.len()).sum();
     let (char_count, set_char_count) = signal(0);
 
-    // 2. RECURSIVE TYPING LOGIC (Fixes the crash)
+    // 2. RECURSIVE TYPING LOGIC
     Effect::new(move |_| {
         let counter = Rc::new(RefCell::new(0));
         let max_chars = total_chars;
@@ -73,7 +73,6 @@ pub fn MiningHero() -> impl IntoView {
                 *counter.borrow_mut() += 1;
                 
                 let next = loop_fn.clone();
-                // Typing speed: 30ms
                 set_timeout(move || {
                     if let Some(f) = next.borrow().as_ref() {
                         f();
@@ -90,24 +89,45 @@ pub fn MiningHero() -> impl IntoView {
     view! {
         <section class="w-full max-w-5xl mx-auto px-4 pt-32 pb-12 flex flex-col items-center justify-center min-h-[60vh]">
             
-            // 3. GREETING ONLY (No "Building Blocks" header here)
-            <div class="text-center mb-10 z-10">
-                <h1 class="text-5xl md:text-7xl font-bold text-zinc-100 tracking-tight mb-4">
-                    "Hello, I'm " <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">"Rishit"</span>
-                </h1>
-                <p class="text-xl text-zinc-400 max-w-2xl mx-auto">
-                    "I build high-performance web systems with Rust & Wasm."
-                </p>
-            </div>
+            // --- ADDED: Custom Blink Animation ---
+            <style>
+                "@keyframes cursor-blink {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0; }
+                }
+                .animate-cursor-blink {
+                    animation: cursor-blink 1s step-end infinite;
+                }"
+            </style>
 
-            // 4. EDITOR WINDOW
+            <div class="text-center mb-10 z-10">
+            // 1. NAME (The Main Headline)
+            <h1 class="text-5xl md:text-7xl font-bold text-zinc-100 tracking-tight mb-4">
+                "Hello, I'm " 
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">
+                    "Rishit"
+                </span>
+            </h1>
+
+            // 2. TAGLINE (The "Logic. Systems. Magic." goes here)
+            <h3 class="text-2xl md:text-3xl font-bold text-zinc-300 mt-4">
+                "Logic. Systems. "
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-500">
+                    "Magic."
+                </span>
+            </h3>
+            
+            // 3. SUBTEXT (Optional: Keep the 'Rust' line small below if you want)
+            <p class="text-sm text-zinc-500 mt-3 font-mono tracking-wide">
+    "It all started with a Hello World."
+</p>
+        </div>
+
             <div class="w-full max-w-3xl relative group z-10">
-                // Background Glow
                 <div class="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl blur-xl opacity-30 group-hover:opacity-50 transition duration-1000"></div>
                 
                 <div class="relative bg-[#1e1e1e] rounded-xl shadow-2xl overflow-hidden border border-zinc-800">
                     
-                    // Title Bar
                     <div class="bg-[#252526] px-4 py-3 flex items-center justify-between border-b border-[#333]">
                         <div class="flex items-center gap-2">
                             <div class="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
@@ -120,7 +140,7 @@ pub fn MiningHero() -> impl IntoView {
                         <div class="w-10"></div>
                     </div>
 
-                    // Code Content (Tokenized)
+                    // Code Content
                     <div class="p-6 md:p-8 font-mono text-sm md:text-base leading-relaxed overflow-x-auto bg-[#1e1e1e] min-h-[300px] whitespace-pre-wrap">
                         {
                             let mut current_idx = 0;
@@ -142,16 +162,23 @@ pub fn MiningHero() -> impl IntoView {
                                         view! { 
                                             <span class={token.class}>
                                                 {slice}
-                                                <span class="inline-block w-2 h-4 bg-orange-500 animate-pulse align-middle ml-0.5"></span>
+                                                <span class="inline-block w-2 h-4 bg-orange-500 animate-cursor-blink align-middle ml-0.5"></span>
                                             </span> 
                                         }.into_any()
                                     }
                                 }
                             }).collect::<Vec<_>>()
                         }
+
+                        {move || {
+                            if char_count.get() >= total_chars {
+                                view! { <span class="inline-block w-2 h-4 bg-orange-500 animate-cursor-blink align-middle ml-0.5"></span> }.into_any()
+                            } else {
+                                view! { <span class="hidden"></span> }.into_any()
+                            }
+                        }}
                     </div>
 
-                    // Status Bar
                     <div class="bg-[#007acc] text-white px-3 py-1 text-xs flex justify-between items-center font-sans">
                         <div class="flex gap-4">
                             <span>"master*"</span>

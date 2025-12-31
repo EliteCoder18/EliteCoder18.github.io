@@ -22,5 +22,13 @@ features = [
     "Window",
     "Document",
     "Node",
-    "HtmlDivElement"
+    "HtmlDivElement",
+    "console"
 ]
+
+[cprofile.release]
+codegen-units = 1
+lto = true
+opt-level = "z"
+panic = "abort"
+strip = true
