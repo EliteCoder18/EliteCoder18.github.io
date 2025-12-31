@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  /* --- 1. THE "DIGITAL BEDROCK" BACKGROUND --- */
+  .bg-mine-depths {
+    background-color: #09090b;
+    /* Static texture stays on the div */
+    background-image: 
+      radial-gradient(circle at 50% 50%, rgba(20, 20, 25, 0) 0%, #000000 100%),
+      repeating-linear-gradient(45deg, #18181b 0px, #18181b 2px, #09090b 2px, #09090b 8px);
+    background-attachment: fixed;
+    min-height: 100vh;
+    position: relative;
+    /* FIX: This stops horizontal scrolling issues */
+    overflow-x: hidden; 
+  }
+
+  /* FIX: The Dust Animation */
+  .bg-mine-depths::before {
+    content: "";
+    /* CHANGED: 'fixed' ensures it stays the size of the SCREEN, not the page */
+    position: fixed; 
+    top: -50%;
+    left: -50%;
+    /* CHANGED: Use Viewport Units (vw/vh) instead of % */
+    width: 200vw;
+    height: 200vh;
+    
+    background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: cave-drift 60s linear infinite;
+    pointer-events: none;
+    z-index: 0; /* Stays behind content */
+  }
+
+  /* @keyframes cave-drift {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  } */
+  
+  /* Ensure content sits ON TOP of the background */
+  .bg-mine-depths > * {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* ... Keep your Cursor, Button, and other styles below ... */
+  /* (Copy the .cursor-mine, :root, body, and .btn-magma sections from previous step here) */
+  /* --- RESTORED HASH CURSOR --- */
+/* A classic terminal cursor, but orange. No tilting/hammering. */
+.cursor-mine {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.2em;
+  background-color: #f97316;
+  vertical-align: text-bottom;
+  margin-left: 2px;
+  /* Standard Blink is more professional than "Hammering" */
+  animation: blink 1s step-end infinite;
+  box-shadow: 0 0 5px rgba(249, 115, 22, 0.5);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+/* Removed the cursor effect*/
+  /* :root {
+    --cursor-pick: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='%23f97316' stroke='black' stroke-width='1'><path d='M17.5 3.5 L20.5 6.5 L19 8 L16 5 L17.5 3.5 M4 17 L7 20 L14 13 L11 10 L4 17 M17 2 L22 7 L19 10 L14 5 L17 2 M6 18 L18 6 L17 5 L5 17 L6 18 Z'/></svg>") 0 24;
+    --cursor-drill: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='%23ef4444' stroke='white' stroke-width='1'><path d='M12 2 L15 5 L12 20 L9 5 Z M9 5 L15 5' /><path d='M7 7 L17 7' stroke='%23ef4444' stroke-width='2'/></svg>") 20 20;
+  } */
+
+  /* body { cursor: var(--cursor-pick), auto; } */
+  
+  /* a, button, .btn-magma {
+    cursor: var(--cursor-drill), pointer;
+  } */
+
+ /* --- UPDATED BUTTON (Professional Feel) --- */
+
+.btn-magma {
+  transition: all 0.2s ease-out; /* Smooth transition */
+  background: linear-gradient(145deg, #27272a, #18181b);
+  border: 1px solid #3f3f46;
+  color: #a1a1aa;
+  font-weight: 700; /* Slightly less bold */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.btn-magma:hover {
+  color: #fff;
+  border-color: #f97316; /* Rust Orange */
+  background: linear-gradient(145deg, #27272a, #18181b); /* Keep background dark */
+  /* Just a subtle glow, no crazy red background change */
+  box-shadow: 0 0 15px rgba(249, 115, 22, 0.3); 
+  transform: translateY(-1px); /* Tiny lift */
+}
+
+.btn-magma:active {
+  transform: translateY(1px); /* Tiny press down */
+  background: #18181b;
+  /* REMOVED: animation: seismic-shake ... */
+}
+/* --- BLOCK PIT PHYSICS --- */
+
+/* --- BLOCK PIT PHYSICS (HEAVY BLOCKS) --- */
+
+.physics-block {
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s;
+  /* Ensure they sit above other things if needed */
+  position: relative; 
+}
+
+.physics-block:hover {
+  /* Push them further away because they are bigger */
+  transform: translate(var(--r-x, 40px), var(--r-y, -60px)) rotate(90deg) scale(1.1) !important;
+  
+  background-color: #f97316; /* Orange Fill */
+  border-color: #fff;
+  box-shadow: 0 10px 25px -5px rgba(249, 115, 22, 0.6); /* heavy shadow */
+  z-index: 50;
+}
+
+/* Scattering Directions */
+.physics-block:nth-child(odd):hover { --r-x: -50px; --r-y: -40px; }
+.physics-block:nth-child(even):hover { --r-x: 50px; --r-y: -40px; }
+.physics-block:nth-child(3n):hover { --r-x: 0px; --r-y: -80px; }
+}
