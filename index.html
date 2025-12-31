@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/input-54ba36bb77c3f1b3.css" integrity="sha384-Wm/TimwP6W4ZOw+YKeFY/qyQ/P7SO1L0NHcaQVsQGTVoF6dMUOEIB+cYMdEmWszy"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rishit Modi | Rust Developer</title>
+    
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+
+    <link rel="modulepreload" href="/my-portfolio-e4a2cfd86e4a072b.js" crossorigin="anonymous" integrity="sha384-V8p79vAvyPrdRVR3bbr0zIBQyGbTh8WR7I5r8xsT9SSETMpNt4NnMDEjmmLYZ15c"><link rel="preload" href="/my-portfolio-e4a2cfd86e4a072b_bg.wasm" crossorigin="anonymous" integrity="sha384-xhJbo3hW3dLFoZrZL13GhSoX6MZaGexLWdqWOocBc8LN0YOlHZ1lLCMnvseNGVyE" as="fetch" type="application/wasm"></head>
+  <body>
+<script type="module">
+import init, * as bindings from '/my-portfolio-e4a2cfd86e4a072b.js';
+const wasm = await init({ module_or_path: '/my-portfolio-e4a2cfd86e4a072b_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script></body>
+</html>
