@@ -1,7 +1,7 @@
 // Declare the modules we created
-mod models;
-mod components;
 mod app;
+mod components;
+mod models;
 #[macro_export]
 macro_rules! console_log {
     ($($t:tt)*) => {
@@ -9,8 +9,8 @@ macro_rules! console_log {
         leptos::logging::log!($($t)*);
     }
 }
-use leptos::prelude::*;
 use app::App;
+use leptos::prelude::*;
 
 fn main() {
     #[cfg(debug_assertions)]

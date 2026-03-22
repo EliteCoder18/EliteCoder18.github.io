@@ -1,5 +1,5 @@
-use leptos::prelude::*;
 use crate::models::Project;
+use leptos::prelude::*;
 
 #[component]
 pub fn ProjectCard(project: Project) -> impl IntoView {
@@ -7,9 +7,9 @@ pub fn ProjectCard(project: Project) -> impl IntoView {
         // Outer "Block" Container
        // Change the border hover color to match the magma feel
         <div class="relative group bg-zinc-900/50 backdrop-blur-sm border border-zinc-700 hover:border-orange-500/50 transition-all duration-300 overflow-hidden">
-            
+
             <div class="h-1 w-full bg-zinc-800 group-hover:bg-orange-500 transition-all duration-500 ease-out"></div>
-            
+
             <div class="p-6 font-mono relative z-10">
                 // Block Header: Hash ID styling
                 <div class="flex justify-between items-center text-xs text-zinc-500 mb-4 border-b border-zinc-800 pb-2">
@@ -21,7 +21,7 @@ pub fn ProjectCard(project: Project) -> impl IntoView {
                 <h3 class="text-xl font-bold text-zinc-100 group-hover:text-orange-500 transition-colors">
                     {"> "}{project.title}
                 </h3>
-                
+
                 // Description (Terminal green/gray)
                 <p class="text-zinc-400 mt-3 text-sm leading-relaxed border-l-2 border-zinc-800 pl-4 group-hover:border-orange-500/50 transition-all">
                     {project.description}
@@ -30,10 +30,10 @@ pub fn ProjectCard(project: Project) -> impl IntoView {
                 // Tech Stack (displayed as an array)
               <div class="flex flex-wrap gap-2 mt-6">
                     {project.tech_stack.into_iter().map(|tech| {
-                        view! { 
+                        view! {
                             <span class="text-[10px] uppercase bg-black/40 text-orange-200/80 px-2 py-1 border border-zinc-700/50">
                                 {tech}
-                            </span> 
+                            </span>
                         }
                     }).collect_view()}
                 </div>

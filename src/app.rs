@@ -3,34 +3,33 @@ use leptos::prelude::*;
 use crate::components::console_guard::ConsoleGuard;
 use crate::components::navbar::Navbar;
 
+use crate::components::block_pit::BlockPit;
 use crate::components::contact_form::Contact;
-use crate::components::mining_hero::MiningHero;
-use crate::components::footer::Footer;
-use crate::components::block_pit::BlockPit; 
-use crate::components::projects::Projects;
 use crate::components::experience::Experience;
+use crate::components::footer::Footer;
+use crate::components::mining_hero::MiningHero;
+use crate::components::projects::Projects;
 #[component]
 pub fn App() -> impl IntoView {
-
     view! {
         <ConsoleGuard />
         <div class="bg-mine-depths min-h-screen text-zinc-200 font-mono selection:bg-orange-500 selection:text-black">
             <Navbar />
-            
+
             // --- HERO SECTION ---
             <section id="home" class="relative pt-24 pb-20 px-6 min-h-[90vh] flex flex-col items-center justify-center">
                 // Background Grid
                 <div class="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none"></div>
 
                 // Headline
-                <div class="text-center relative z-10 mb-2"> 
+                <div class="text-center relative z-10 mb-2">
                  <p class="text-sm font-mono text-orange-500 tracking-widest uppercase">
-                        "// SYSTEM_ARCHITECTURE_V1" 
+                        "// SYSTEM_ARCHITECTURE_V1"
                 </p>
                 </div>
 
                 <MiningHero />
-                
+
             </section>
 
             // --- PROJECTS ---

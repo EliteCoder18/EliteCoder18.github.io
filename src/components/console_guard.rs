@@ -1,6 +1,6 @@
 use leptos::prelude::*;
+use wasm_bindgen::JsCast;
 use wasm_bindgen::prelude::*;
-use wasm_bindgen::JsCast; 
 
 #[component]
 pub fn ConsoleGuard() -> impl IntoView {
@@ -11,7 +11,6 @@ pub fn ConsoleGuard() -> impl IntoView {
         web_sys::console::log_1(&"// SYSTEM SECURED: ARCHITECTURE HIDDEN".into());
 
         if let Some(win) = web_sys::window() {
-            
             // 2. Disable Right Click
             if let Some(doc) = win.document() {
                 if let Some(body) = doc.body() {
@@ -23,7 +22,7 @@ pub fn ConsoleGuard() -> impl IntoView {
                         "contextmenu",
                         closure.as_ref().unchecked_ref(),
                     );
-                    
+
                     closure.forget();
                 }
             }
@@ -31,23 +30,21 @@ pub fn ConsoleGuard() -> impl IntoView {
             // 3. Disable F12 / DevTools Shortcuts
             let closure_keys = Closure::wrap(Box::new(move |e: web_sys::KeyboardEvent| {
                 let key = e.key();
-                let code = e.key_code(); 
-                
+                let code = e.key_code();
+
                 // Block F12 (123), Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-                if code == 123 || 
-                   (e.ctrl_key() && e.shift_key() && (key == "I" || key == "J")) || 
-                   (e.ctrl_key() && key == "U") 
+                if code == 123
+                    || (e.ctrl_key() && e.shift_key() && (key == "I" || key == "J"))
+                    || (e.ctrl_key() && key == "U")
                 {
                     e.prevent_default();
                     e.stop_propagation();
                 }
             }) as Box<dyn FnMut(_)>);
 
-            let _ = win.add_event_listener_with_callback(
-                "keydown",
-                closure_keys.as_ref().unchecked_ref(),
-            );
-            
+            let _ = win
+                .add_event_listener_with_callback("keydown", closure_keys.as_ref().unchecked_ref());
+
             closure_keys.forget();
         }
     });

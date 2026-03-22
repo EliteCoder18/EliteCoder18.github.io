@@ -10,7 +10,6 @@ struct Role {
 #[component]
 pub fn Experience() -> impl IntoView {
     let history = vec![
-        
         Role {
             title: "Core Team Member",
             org: "Saturnalia (Techno-Cultural Fest)",
@@ -44,7 +43,7 @@ pub fn Experience() -> impl IntoView {
                     <div class="relative pl-8 md:pl-12 group">
                         // Timeline Dot
                         <div class="absolute -left-[5px] top-2 w-2.5 h-2.5 rounded-full bg-zinc-800 border border-zinc-950 group-hover:bg-orange-500 group-hover:shadow-[0_0_10px_rgba(249,115,22,0.6)] transition-all duration-300"></div>
-                        
+
                         // Content Card
                         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
                             <h3 class="text-xl font-bold text-white group-hover:text-orange-400 transition-colors">
@@ -54,11 +53,11 @@ pub fn Experience() -> impl IntoView {
                                 {role.date}
                             </span>
                         </div>
-                        
+
                         <div class="text-sm font-mono text-orange-500/80 mb-3">
                             "@" {role.org}
                         </div>
-                        
+
                         <p class="text-zinc-400 leading-relaxed text-sm max-w-2xl">
                             {role.desc}
                         </p>

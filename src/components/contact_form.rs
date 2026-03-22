@@ -1,5 +1,5 @@
-use leptos::prelude::*;
 use leptos::ev::SubmitEvent;
+use leptos::prelude::*;
 use leptos::task::spawn_local; // Needed for async
 use serde::{Deserialize, Serialize}; // Needed for data handling
 
@@ -19,10 +19,12 @@ pub fn Contact() -> impl IntoView {
 
     let on_submit = move |ev: SubmitEvent| {
         ev.prevent_default();
-        
+
         // Prevent double submission
-        if status.get() == "sending" || status.get() == "success" { return; }
-        
+        if status.get() == "sending" || status.get() == "success" {
+            return;
+        }
+
         set_status.set("sending");
 
         spawn_local(async move {
@@ -33,8 +35,8 @@ pub fn Contact() -> impl IntoView {
                 message: message.get(),
             };
 
-       
-            let res = client.post("https://formspree.io/f/mvzoepgp")
+            let res = client
+                .post("https://formspree.io/f/mvzoepgp")
                 .header("Accept", "application/json")
                 .form(&payload) // Using .form() for best compatibility
                 .send()
@@ -48,11 +50,13 @@ pub fn Contact() -> impl IntoView {
                         set_name.set(String::new());
                         set_email.set(String::new());
                         set_message.set(String::new());
-                        
-                       
-                        leptos::leptos_dom::helpers::set_timeout(move || {
-                            set_status.set("idle"); 
-                        }, std::time::Duration::from_secs(3));
+
+                        leptos::leptos_dom::helpers::set_timeout(
+                            move || {
+                                set_status.set("idle");
+                            },
+                            std::time::Duration::from_secs(3),
+                        );
                     } else {
                         set_status.set("error");
                     }
@@ -80,9 +84,9 @@ pub fn Contact() -> impl IntoView {
             <div class="relative group">
                 // Background Glow Effect
                 <div class="absolute -inset-1 bg-gradient-to-r from-orange-500/20 to-zinc-600/20 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-                
+
                 <div class="relative bg-zinc-900 border border-zinc-800 rounded-xl p-8 md:p-12 shadow-2xl">
-                    
+
                     // SUCCESS MESSAGE OVERLAY
                     {move || if status.get() == "success" {
                         view! {
@@ -98,7 +102,7 @@ pub fn Contact() -> impl IntoView {
 
                     <form on:submit=on_submit class="space-y-6 relative z-10">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            
+
                             // Name Input
                             <div class="space-y-2">
                                 <label class="text-sm font-semibold text-zinc-300 ml-1">"Name"</label>
@@ -156,7 +160,7 @@ pub fn Contact() -> impl IntoView {
                                 }}
                             </button>
                         </div>
-                        
+
                         // Error Text
                         {move || if status.get() == "error" {
                             view! { <p class="text-red-500 text-sm text-right">"Something went wrong. Please check your connection."</p> }.into_any()
