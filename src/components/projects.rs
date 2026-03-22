@@ -9,21 +9,21 @@ pub fn Projects() -> impl IntoView {
             id: 1,
             title: "Chain-Lens".into(),
             description: "A high-performance Bitcoin blockchain analysis tool built in Rust. Chain Lens provides both CLI and web-based interfaces for parsing, validating, and analyzing Bitcoin transactions and blocks with detailed cryptographic insights.".into(),
-            tech_stack: vec!["JavaScript".into(), "Rust".into()],
+            tech_stack: vec!["Rust".into(),"Shell".into()],
             link: "https://github.com/EliteCoder18/Chain-Lens".into(),
               },
         Project {
             id: 2,
             title: "CoinSmith".into(),
             description: "A robust Bitcoin transaction builder written in Rust that handles UTXO selection, fee calculation, and PSBT generation with support for multiple script types and advanced features like RBF and locktime.".into(),
-            tech_stack: vec!["JavaScript".into(), "CSS".into(), "Python".into(), "Shell".into()],
+            tech_stack: vec!["Rust".into(), "Shell".into()],
             link: "https://github.com/EliteCoder18/Coin-Smith".into(), // Update this specific repo link
         },
         Project {
             id: 3,
             title: "Sherlock".into(),
             description: "A powerful, modular Bitcoin blockchain analysis tool that applies sophisticated chain-analysis heuristics to detect transaction patterns and wallet behavior.".into(),
-            tech_stack: vec!["JavaScript".into(), "CSS".into(), "Python".into(), "Shell".into()],
+            tech_stack: vec!["Rust".into(),"Shell".into()],
             link: "https://github.com/EliteCoder18/Sherlock".into(), // Update this specific repo link
         },
         Project {
